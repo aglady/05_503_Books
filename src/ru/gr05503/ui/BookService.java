@@ -1,6 +1,7 @@
 package ru.gr05503.ui;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class BookService {
     final private BookRepository repository;
@@ -32,5 +33,8 @@ public class BookService {
             throw new IllegalArgumentException("неверное число");
         }
         return result;
+    }
+    public List<Book> getAllBooks(){
+        return repository.findAll();
     }
 }
