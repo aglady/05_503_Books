@@ -8,5 +8,6 @@ public class Main {
         var wnd = new Window(presenter);
         presenter.setView(wnd);
         wnd.setVisible(true);
+        presenter.viewOpened();
     }
 }

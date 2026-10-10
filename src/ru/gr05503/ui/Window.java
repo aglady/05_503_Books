@@ -14,7 +14,7 @@ public class Window extends JFrame implements BookView {
     JButton btnAdd = new JButton("Добавить");
     private JTextArea taBooks = new JTextArea();
     private final BookPresenter presenter;
-
+    private final JLabel lblStatus = new JLabel();
     public Window(BookPresenter presenter) {
         this.presenter = presenter;
 
@@ -30,6 +30,27 @@ public class Window extends JFrame implements BookView {
 
         btnAdd.addActionListener(e -> {
             presenter.addBookClicked();
+        });
+
+        tfAuthor.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                presenter.inputChanged();
+            }
+        });
+
+        tfTitle.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                presenter.inputChanged();
+            }
+        });
+
+        tfYear.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                presenter.inputChanged();
+            }
         });
 
         GroupLayout layout = new GroupLayout(topPanel);
@@ -80,6 +101,7 @@ public class Window extends JFrame implements BookView {
 
         add(topPanel, BorderLayout.NORTH);
         add(new JScrollPane(taBooks), BorderLayout.CENTER);
+        add( lblStatus, BorderLayout.SOUTH);
         pack();
         setLocationRelativeTo(null);
     }
@@ -129,6 +151,14 @@ public class Window extends JFrame implements BookView {
             }
             taBooks.append(System.lineSeparator());
         }
+    }
+
+    @Override
+    public void render(BookFormState state) {
+     btnAdd.setEnabled(state.addEnabled());
+     lblStatus.setText(state.status());
+     if ( state.error()!= null)
+         showError(state.error());
     }
 
     @Override

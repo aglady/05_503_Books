@@ -14,8 +14,31 @@ public class BookPresenter {
             service.addBook(view.getAuthor(), view.getBookTitle(), view.getYear(), view.getInfo());
             view.clearForm();
             view.showBooks(service.getAllBooks());
+            view.render(BookFormState.init());
         } catch(IllegalArgumentException e) {
-            view.showError(e.getMessage());
+            view.render(BookFormState.setError(e.getMessage()));
         }
+    }
+    public void viewOpened(){
+        view.showBooks(service.getAllBooks());
+        view.render(BookFormState.init());
+    }
+
+    public void inputChanged(){
+        if (isAddAllowed()){
+            view.render(BookFormState.setReady());
+        } else {
+            view.render(BookFormState.init());
+        }
+    }
+
+    public boolean isAddAllowed(){
+        return isNotBlank(view.getAuthor())
+                && isNotBlank(view.getBookTitle())
+                && isNotBlank(view.getYear());
+    }
+
+    private boolean isNotBlank(String value) {
+        return value != null && !value.isBlank();
     }
 }
