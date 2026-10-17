@@ -1,17 +1,22 @@
 package ru.gr05503.ui;
 
+import ru.gr05503.application.BookService;
+
 public class BookPresenter {
     private final BookService service;
     private BookView view;
-    public BookPresenter(BookService service) {
+    private final BookInputParser parser;
+    public BookPresenter(BookService service, BookInputParser parser) {
         this.service = service;
+        this.parser = parser;
     }
     public void setView(BookView view) {
         this.view = view;
     }
     public void addBookClicked(){
         try {
-            service.addBook(view.getAuthor(), view.getBookTitle(), view.getYear(), view.getInfo());
+            ParsedBookInput parsedBookInput = parser.parse(view.getAuthor(), view.getBookTitle(), view.getYear(), view.getInfo());
+            service.addBook(parsedBookInput);
             view.clearForm();
             view.showBooks(service.getAllBooks());
             view.render(BookFormState.init());
